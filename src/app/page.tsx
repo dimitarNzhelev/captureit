@@ -6,14 +6,23 @@ import { Button } from "~/components/ui/button"
 import { Card, CardContent } from "~/components/ui/card"
 import { useSession } from 'next-auth/react'
 import LandingPosts from 'constants/posts'
+import { useEffect } from "react"
 
 const MotionLink = motion(Link)
 
 export default function HomePage() {
-  const {data: session} = useSession()
+  const { data: session, status } = useSession()
+
+
 
   return (
     <div className="min-h-screen bg-black text-white">
+
+      {status === 'loading' ? (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
+        </div>
+      ):(
       <main>
         <motion.section 
           className="py-32 text-center"
@@ -109,7 +118,7 @@ export default function HomePage() {
           </div>
         </motion.section>
       </main>
-
+      )}
       
     </div>
   )
