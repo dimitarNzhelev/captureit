@@ -7,10 +7,12 @@ import { Button } from "~/components/ui/button"
 import { Card, CardContent } from "~/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Camera, LogIn, Menu, X, Heart, MessageCircle, Share2 } from "lucide-react"
+import { signOut, useSession } from 'next-auth/react'
 
 const MotionLink = motion(Link)
 
 export default function HomePage() {
+  const {data: session} = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -36,12 +38,18 @@ export default function HomePage() {
               All Posts
             </MotionLink>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              {session ? (
+                <Button variant="outline" size="sm" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={()=> signOut()}>
+                  Sign Out
+                </Button>
+              ) : (
               <Link href="api/auth/signin">
               <Button variant="outline" size="sm" className="bg-purple-600 hover:bg-purple-700 border-none">
                 <LogIn className="h-4 w-4 mr-2" />
                 Sign In
               </Button>
               </Link>
+              )}
             </motion.div>
           </nav>
           <Button 
@@ -71,10 +79,16 @@ export default function HomePage() {
           >
             All Posts
           </MotionLink>
+          {session ? (
+              <Button variant="outline" size="lg" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={() => {signOut(); setIsMenuOpen(false);}}>
+               Sign Out
+              </Button>
+          ) : (
           <Button variant="outline" size="lg" onClick={() => setIsMenuOpen(false)} className="bg-purple-600 hover:bg-purple-700 border-none">
             <LogIn className="h-5 w-5 mr-2" />
             Sign In
           </Button>
+          )}
         </motion.div>
       )}
 
@@ -90,11 +104,19 @@ export default function HomePage() {
           </h1>
           <p className="text-xl mb-8 text-gray-400">Join our community of photographers and visual storytellers</p>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {session ? (
+              <Link href="/posts">
+                <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                  Add Posts
+                </Button>
+              </Link>
+            ) : (
           <Link href="api/auth/signin">
             <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
               Get Started
             </Button>
             </Link>
+            )}
           </motion.div>
         </motion.section>
 
@@ -147,11 +169,19 @@ export default function HomePage() {
           <p className="text-xl mb-8 text-gray-400">Sign up now and get access to our vibrant community</p>
           <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {session ? (
+              <Link href="/posts">
+                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 w-full md:w-auto">
+                  Add Posts
+                </Button>
+              </Link>
+            ) : (
             <Link href="api/auth/signin">
               <Button size="lg" className="bg-purple-600 hover:bg-purple-700 w-full md:w-auto">
                 Get Started
               </Button>
             </Link>
+            )}
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button variant="outline" size="lg" className="w-full md:w-auto border-purple-500 text-purple-400 hover:bg-purple-700 hover:text-white">
