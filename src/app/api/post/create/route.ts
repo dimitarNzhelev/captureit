@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { getServerAuthSession } from "~/server/auth";
 import { v4 as uuidv4 } from "uuid";
 import { NextResponse } from "next/server";
+import { env } from "~/env";
 
 export async function POST(req: Request) {
   const session = await getServerAuthSession();
@@ -23,14 +24,14 @@ export async function POST(req: Request) {
   try {
     await s3Client.send(
       new PutObjectCommand({
-        Bucket: process.env.AWS_S3_BUCKET_NAME!,
+        Bucket: env.AWS_BUCKET_NAME!,
         Key: imageKey,
         Body: imageBuffer,
         ContentType: "image/jpeg",
       })
     );
 
-    const imageURL = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageKey}`;
+    const imageURL = `https://${env.AWS_BUCKET_NAME}.s3.${env.AWS_REGION}.amazonaws.com/${imageKey}`;
 
     const post = await db.post.create({
       data: {

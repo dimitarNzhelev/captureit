@@ -3,6 +3,8 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import SessionProviderWrapper from "~/components/SessionProviderWrapper";
+import Header from "~/components/header";
+import Footer from "~/components/footer";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -17,7 +19,9 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <SessionProviderWrapper>
+          <Header />
           {children}
+          <Footer />
         </SessionProviderWrapper>
       </body>
     </html>

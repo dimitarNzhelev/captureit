@@ -6,92 +6,16 @@ import { motion } from 'framer-motion'
 import { Button } from "~/components/ui/button"
 import { Card, CardContent } from "~/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { Camera, LogIn, Menu, X, Heart, MessageCircle, Share2 } from "lucide-react"
+import { LogIn } from "lucide-react"
 import { signOut, useSession } from 'next-auth/react'
 
 const MotionLink = motion(Link)
 
 export default function HomePage() {
   const {data: session} = useSession()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <header className="fixed w-full z-10 bg-black/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <MotionLink 
-            href="/" 
-            className="flex items-center space-x-2"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Camera className="h-6 w-6 text-purple-500" />
-            <span className="text-xl font-bold">CaptureIt.</span>
-          </MotionLink>
-          <nav className="hidden md:flex space-x-4 items-center">
-            <MotionLink 
-              href="/posts" 
-              className="hover:text-purple-400 transition-colors"
-              whileHover={{ y: -2 }}
-              whileTap={{ y: 0 }}
-            >
-              All Posts
-            </MotionLink>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              {session ? (
-                <Button variant="outline" size="sm" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={()=> signOut()}>
-                  Sign Out
-                </Button>
-              ) : (
-              <Link href="api/auth/signin">
-              <Button variant="outline" size="sm" className="bg-purple-600 hover:bg-purple-700 border-none">
-                <LogIn className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
-              </Link>
-              )}
-            </motion.div>
-          </nav>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X /> : <Menu />}
-          </Button>
-        </div>
-      </header>
-
-      {isMenuOpen && (
-        <motion.div 
-          className="fixed inset-0 bg-black z-20 flex flex-col items-center justify-center space-y-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <MotionLink 
-            href="/posts" 
-            className="text-2xl hover:text-purple-400 transition-colors"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            All Posts
-          </MotionLink>
-          {session ? (
-              <Button variant="outline" size="lg" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={() => {signOut(); setIsMenuOpen(false);}}>
-               Sign Out
-              </Button>
-          ) : (
-          <Button variant="outline" size="lg" onClick={() => setIsMenuOpen(false)} className="bg-purple-600 hover:bg-purple-700 border-none">
-            <LogIn className="h-5 w-5 mr-2" />
-            Sign In
-          </Button>
-          )}
-        </motion.div>
-      )}
-
       <main>
         <motion.section 
           className="py-32 text-center"
@@ -105,7 +29,7 @@ export default function HomePage() {
           <p className="text-xl mb-8 text-gray-400">Join our community of photographers and visual storytellers</p>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             {session ? (
-              <Link href="/posts">
+              <Link href="/posts/new">
                 <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
                   Add Posts
                 </Button>
@@ -170,7 +94,7 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             {session ? (
-              <Link href="/posts">
+              <Link href="/posts/new">
                 <Button size="lg" className="bg-purple-600 hover:bg-purple-700 w-full md:w-auto">
                   Add Posts
                 </Button>
@@ -192,11 +116,7 @@ export default function HomePage() {
         </motion.section>
       </main>
 
-      <footer className="border-t border-gray-800 py-8">
-        <div className="container mx-auto px-4 text-center text-gray-400">
-          <p>&copy; 2024 CaptureIt. All rights reserved.</p>
-        </div>
-      </footer>
+      
     </div>
   )
 }

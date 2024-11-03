@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from "next/link"
 import { motion } from 'framer-motion'
@@ -14,7 +14,7 @@ import { useSession } from 'next-auth/react'
 const MotionLink = motion(Link)
 
 export default function CreatePostPage() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const [image, setImage] = useState<File | null>(null)
   const [caption, setCaption] = useState('')
@@ -43,7 +43,7 @@ export default function CreatePostPage() {
       const base64Image = reader.result?.toString().split(",")[1];
   
       try {
-        const response = await fetch("/api/posts/create", {
+        const response = await fetch("/api/post/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -69,36 +69,16 @@ export default function CreatePostPage() {
     fileInputRef.current?.click()
   }
 
-  if (!session) {
-    router.push('/api/auth/signin')
-    return null
-  }
+
+  useEffect(() => {
+    if (status === 'loading') return;
+    if (!session) {
+      router.push('/api/auth/signin')
+    }
+  }, [session, status, router])
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <header className="fixed w-full z-10 bg-black/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <MotionLink 
-            href="/" 
-            className="flex items-center space-x-2"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Camera className="h-6 w-6 text-purple-500" />
-            <span className="text-xl font-bold">CaptureIt.</span>
-          </MotionLink>
-          <MotionLink
-            href="/posts"
-            className="flex items-center text-purple-400 hover:text-purple-300 transition-colors"
-            whileHover={{ x: -2 }}
-            whileTap={{ x: 0 }}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Posts
-          </MotionLink>
-        </div>
-      </header>
-
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <motion.div
@@ -160,12 +140,6 @@ export default function CreatePostPage() {
           </motion.div>
         </div>
       </main>
-
-      <footer className="border-t border-gray-800 py-8">
-        <div className="container mx-auto px-4 text-center text-gray-400">
-          <p>&copy; 2024 CaptureIt. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   )
 }
