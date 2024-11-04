@@ -1,0 +1,35 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: your_database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  nextjs:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: nextjs_container
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://your_username:your_password@db:5432/your_database
+    depends_on:
+      - db
+    volumes:
+      - ./next-app:/app
+      - /app/node_modules
+    command: "yarn dev" # Use `yarn start` in production
+
+volumes:
+  postgres_data:
+    driver: local
