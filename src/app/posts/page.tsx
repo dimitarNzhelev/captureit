@@ -5,24 +5,38 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '~/components/ui/card';
 import { Camera } from 'lucide-react';
-import { Button } from '~/components/ui/button';
+import Image from 'next/image';
+
+type Post = {
+  id: string;
+  name: string;
+  createdById: string;
+  imageURL: string;
+  createdAt: Date;
+  createdBy: {
+    name: string;
+  };
+};
 
 export default function PostPage() {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    // Fetch posts from API
     const fetchPosts = async () => {
-      const res = await fetch('/api/post/get'); // Adjust this endpoint
-      const data = await res.json();
-      setPosts(data);
+      try {
+        const res = await fetch('/api/post/get');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const data: Post[] = await res.json();
+        setPosts(data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
     };
-    fetchPosts();
+   void fetchPosts();
   }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Main Content */}
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">
@@ -30,7 +44,6 @@ export default function PostPage() {
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Create post */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -60,7 +73,7 @@ export default function PostPage() {
                 >
                   <Card className="bg-gray-900 overflow-hidden border-purple-500 border-opacity-0 group-hover:border-opacity-100 transition-all duration-300">
                     <CardContent className="p-0 relative">
-                      <img
+                    <img
                         src={post.imageURL}
                         alt={post.name}
                         className="w-full h-64 object-cover"

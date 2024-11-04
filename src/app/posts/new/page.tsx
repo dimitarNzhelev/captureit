@@ -22,13 +22,12 @@ export default function CreatePostPage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0]
-      setImage(file)
-      setPreviewUrl(URL.createObjectURL(file))
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
     }
-  }
-
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -40,8 +39,8 @@ export default function CreatePostPage() {
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.onloadend = async () => {
-      const base64Image = reader.result?.toString().split(",")[1];
-  
+      const base64Image = (reader.result as string)?.split(",")[1];
+
       try {
         const response = await fetch("/api/post/create", {
           method: "POST",

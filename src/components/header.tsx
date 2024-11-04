@@ -6,10 +6,9 @@ import { motion } from 'framer-motion'
 import { useSession, signOut } from "next-auth/react"
 import { Button } from "~/components/ui/button"
 
-
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const {data: session} = useSession()
+    const { data: session } = useSession()
     const MotionLink = motion(Link)
 
     return (
@@ -36,7 +35,7 @@ export default function Header() {
             </MotionLink>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               {session ? (
-                <Button variant="outline" size="sm" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={()=> signOut()}>
+                <Button variant="outline" size="sm" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={async () => { await signOut() }}>
                   Sign Out
                 </Button>
               ) : (
@@ -60,7 +59,6 @@ export default function Header() {
         </div>
       </header>
 
-
       {isMenuOpen && (
         <motion.div 
           className="fixed inset-0 bg-black z-20 flex flex-col items-center justify-center space-y-4"
@@ -78,7 +76,7 @@ export default function Header() {
             All Posts
           </MotionLink>
           {session ? (
-              <Button variant="outline" size="lg" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={() => {signOut(); setIsMenuOpen(false);}}>
+              <Button variant="outline" size="lg" className="bg-purple-600 hover:bg-purple-700 border-none" onClick={async () => { await signOut(); setIsMenuOpen(false); }}>
                Sign Out
               </Button>
           ) : (
@@ -90,6 +88,5 @@ export default function Header() {
         </motion.div>
       )}
       </>
-
     )
 }

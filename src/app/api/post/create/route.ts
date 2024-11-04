@@ -12,8 +12,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const { caption, image } = await req.json();
-
+  type PostData = {
+    caption: string;
+    image: string;
+  };
+  
+  const data: PostData = await req.json(); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+  const { caption, image } = data;
+  
   if (!image) {
     return NextResponse.json({ message: "Image is required" }, { status: 400 });
   }
@@ -24,7 +30,7 @@ export async function POST(req: Request) {
   try {
     await s3Client.send(
       new PutObjectCommand({
-        Bucket: env.AWS_BUCKET_NAME!,
+        Bucket: env.AWS_BUCKET_NAME,
         Key: imageKey,
         Body: imageBuffer,
         ContentType: "image/jpeg",
