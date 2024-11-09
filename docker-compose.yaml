@@ -14,7 +14,7 @@ services:
       - app-network
 
   app:
-    build: .
+    image: dimitarnzhv/captureit-app
     restart: always
     ports:
       - '3000:3000'

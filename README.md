@@ -1,29 +1,31 @@
-# Create T3 App
+# CaptureIt
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+<h3>CaptureIt is a platform for sharing images.</h3>
 
-## What's next? How do I make an app with this?
+## How to Run
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### Presiquences
+To get started with CaptureIt, ensure you have Docker Engine installed and running on your system.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### Running the Application
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+#### Clone the repository
+```sh
+ git clone https://github.com/dimitarNzhelev/captureit.git
+```
 
-## Learn More
+#### Run the `docker-compose.yaml` file
+Depending on your operating system and Docker Compose version, you can run the `docker-compose.yaml` file using one of the following commands:
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+```sh
+docker compose up
+```
+or 
+```sh
+docker-compose up
+```
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+<b>Note: </b>Make sure to execute the command from the directory containing the `docker-compose.yaml` file.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Important Information
+When you run the application, a new folder is created to act as a volume for the database. This folder stores all the database information, ensuring that your data is preserved even if the container is stopped or deleted.
